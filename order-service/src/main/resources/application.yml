@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: synpulse
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cache
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
