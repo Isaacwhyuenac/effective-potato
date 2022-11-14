@@ -5,13 +5,15 @@ org.springframework.cloud.contract.spec.Contract.make {
         method 'GET'
         url '/transactions'
         headers {
-            contentType('application/json')
+            header('Content-Type': 'application/json')
         }
     }
 
     response {
         status OK()
+        headers {
+            header('Content-Type': 'application/json')
 
-        contentType('application/json')
+        }
     }
 }
