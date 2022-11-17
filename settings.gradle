@@ -12,7 +12,7 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "synpulse"
+rootProject.name = "contract"
 
 include 'order-service'
 include 'consumer'

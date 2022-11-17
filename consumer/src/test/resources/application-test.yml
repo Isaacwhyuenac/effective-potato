@@ -5,8 +5,10 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
 #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  stubrunner:
-    stream:
-      enabled: false
-    integration:
-      enabled: false
+stubrunner:
+  stream:
+    enabled: false
+  integration:
+    enabled: false
+  kafka:
+    enabled: true

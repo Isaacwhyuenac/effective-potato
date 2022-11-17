@@ -57,7 +57,7 @@ dependencies {
     testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
     testImplementation "org.awaitility:awaitility:3.1.6"
 
-    testImplementation project(":order-service")
+//    testImplementation project(":order-service")
 }
 
 dependencyManagement {
