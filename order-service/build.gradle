@@ -1,10 +1,16 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
 plugins {
+    id 'java'
+    id 'maven-publish'
+//    id "de.esoco.gwt" version "1.1.1"
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'org.asciidoctor.convert' version '1.5.8'
-    id 'java'
     id 'org.springframework.experimental.aot' version '0.12.1'
     id "org.springframework.cloud.contract" version "3.1.5"
+    id "org.springdoc.openapi-gradle-plugin" version "1.5.0"
+
 //    id 'org.hibernate.orm'
 }
 
@@ -19,10 +25,13 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     maven { url 'https://repo.spring.io/release' }
     mavenCentral()
     google()
 }
+
+
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
@@ -30,25 +39,69 @@ ext {
 }
 
 contracts {
-    contractsDslDir = file("${projectDir}/src/test/resources/contracts")
+    baseClassForTests "com.example.producer.controller.BaseClass"
+//    contractsDslDir = file("${projectDir}/src/test/resources/contracts")
+
+    testFramework = TestFramework.JUNIT5
+}
+
+openApi {
+    // apiDocsUrl.set("https://localhost:9000/api/docs")
+    // outputDir.set(file("$buildDir/docs"))
+//    delete(file("$rootDir/docs"))
+
+    outputDir.set(file("$rootDir/docs"))
+    outputFileName.set("swagger.json")
+    // waitTimeInSeconds.set(10)
+    // groupedApiMappings.set(["https://localhost:8080/v3/api-docs/groupA" to "swagger-groupA.json",
+    //                         "https://localhost:8080/v3/api-docs/groupB" to "swagger-groupB.json"])
+    // customBootRun {
+    //     args.set(["--spring.profiles.active=special"])
+    // }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact bootJar
+
+            artifact verifierStubsJar
+//            artifact sourceJar {
+//                classifier 'sources'
+//            }
+        }
+//        stubs(MavenPublication) {
+//            artifactId "$project.name-stubs"
+//            artifact verifierStubsJar {
+//                classifier 'stubs'
+//            }
+//        }
+    }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-function-web'
+//    implementation 'org.springframework.cloud:spring-cloud-function-web'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     implementation 'org.codehaus.groovy:groovy-all:2.4.6'
-    implementation 'io.springfox:springfox-swagger2:2.10.5'
-    implementation 'io.springfox:springfox-swagger-ui:2.10.5'
+
+    implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.12'
+//    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+//    implementation 'io.springfox:springfox-swagger2:2.10.5'
+//    implementation 'io.springfox:springfox-swagger-ui:2.10.5'
+
     implementation 'org.modelmapper.extensions:modelmapper-spring:3.0.0'
     implementation 'org.modelmapper.extensions:modelmapper-jackson:3.0.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
 
     implementation 'org.postgresql:postgresql:42.5.0'
-
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -57,8 +110,15 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+//    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
+    testImplementation 'io.rest-assured:rest-assured:3.0.6'
+    testImplementation 'io.rest-assured:spring-mock-mvc:3.0.6'
+    testImplementation "io.rest-assured:json-path:3.0.6"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
+
 }
 
 dependencyManagement {

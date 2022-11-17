@@ -61,7 +61,7 @@ $ ./gradlew bootBuildImage
 Then, you can run the app like any other container:
 
 ```
-$ docker run --rm -p 8080:8080 synpulse8:0.0.1-SNAPSHOT
+$ docker run --rm -p 8080:8080 producer:0.0.1-SNAPSHOT
 ```
 
 ### Executable with Native Build Tools
@@ -80,5 +80,5 @@ $ ./gradlew nativeCompile
 Then, you can run the app as follows:
 
 ```
-$ build/native/nativeCompile/synpulse8
+$ build/native/nativeCompile/producer
 ```

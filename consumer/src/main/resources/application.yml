@@ -1,28 +1,18 @@
-#debug: true
-auth0:
-  audience: https://dev-qrj9gibi.us.auth0.com/api/v2/
 kafka:
   topic:
     transaction: transaction
 
+server:
+  port: 8081
 
 spring:
-  application:
-    name: synpulse
-  security:
-#    user:
-#      password: Test12345_
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://dev-qrj9gibi.us.auth0.com/
-
   kafka:
     bootstrap-servers:
       - localhost:29092
-    producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+    consumer:
+      enable-auto-commit: false
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
