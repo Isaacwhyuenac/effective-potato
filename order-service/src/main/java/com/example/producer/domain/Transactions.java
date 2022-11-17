@@ -11,11 +11,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "transactions", schema = "public")
+@Table(name = "transactions")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transactions implements Serializable {
   public static final String DAY_TIME_PATTERN = "MM-dd-yyyy";
 

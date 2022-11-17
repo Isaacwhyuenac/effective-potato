@@ -26,23 +26,29 @@ configurations {
 
 repositories {
     mavenLocal()
-    maven { url 'https://repo.spring.io/release' }
     mavenCentral()
     google()
+    maven { url 'https://repo.spring.io/release' }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/release" }
 }
 
 
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
-    set('springCloudVersion', "2021.0.4")
+    set('springCloudVersion', "${BOM_VERSION}")
 }
 
 contracts {
-    baseClassForTests "com.example.producer.controller.BaseClass"
+    baseClassForTests "com.example.producer.BaseClass"
 //    contractsDslDir = file("${projectDir}/src/test/resources/contracts")
 
     testFramework = TestFramework.JUNIT5
+}
+
+contractTest {
+    useJUnitPlatform()
 }
 
 openApi {
@@ -66,16 +72,9 @@ publishing {
             artifact bootJar
 
             artifact verifierStubsJar
-//            artifact sourceJar {
-//                classifier 'sources'
-//            }
+
         }
-//        stubs(MavenPublication) {
-//            artifactId "$project.name-stubs"
-//            artifact verifierStubsJar {
-//                classifier 'stubs'
-//            }
-//        }
+
     }
 }
 
@@ -86,16 +85,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     implementation 'org.codehaus.groovy:groovy-all:2.4.6'
 
     implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.12'
-//    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-//    implementation 'io.springfox:springfox-swagger2:2.10.5'
-//    implementation 'io.springfox:springfox-swagger-ui:2.10.5'
 
     implementation 'org.modelmapper.extensions:modelmapper-spring:3.0.0'
     implementation 'org.modelmapper.extensions:modelmapper-jackson:3.0.0'
@@ -117,7 +112,7 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:3.0.6'
     testImplementation 'io.rest-assured:spring-mock-mvc:3.0.6'
     testImplementation "io.rest-assured:json-path:3.0.6"
-    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
+//    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
 
 }
 

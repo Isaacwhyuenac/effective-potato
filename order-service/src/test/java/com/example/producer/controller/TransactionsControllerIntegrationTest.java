@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,23 +14,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.example.producer.BaseClass;
 import com.example.producer.dto.TransactionDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
-//  classes = {TestConfiguration.class},
   webEnvironment = SpringBootTest.WebEnvironment.MOCK
 )
-//@EnableAutoConfiguration(exclude = {
-//  DataSourceAutoConfiguration.class,
-//  DataSourceTransactionManagerAutoConfiguration.class,
-//  HibernateJpaAutoConfiguration.class
-//})
-//@AutoConfigureWireMock(port = 0)
-//@DirtiesContext
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 class TransactionsControllerIntegrationTest extends BaseClass {
 
 //  @StubRunnerPort("order-service")
@@ -88,59 +80,6 @@ class TransactionsControllerIntegrationTest extends BaseClass {
     }
   }
 
-//  @Test
-//  public void assertMustFail() {
-//    Assertions.assertEquals(true, false);
-//  }
-
-//  @Test
-//  public void assertCreateTransaction() {
-//    String expectedPath = "/transactions";
-//
-////    WireMock.stubFor(
-////      WireMock.post(WireMock.urlEqualTo(expectedPath))
-//////        .withRequestBody()
-////        .willReturn(
-////          WireMock.aResponse()
-////            .withStatus(HttpStatus.CREATED.value())
-//////            .withHeader(HttpHeaders.LOCATION, )
-////        )
-////    );
-//
-////    UUID uuid = UUID.fromString("");
-//
-////    TransactionDto transactionDto = new TransactionDto();
-////    transactionDto.setId(uuid);
-////    transactionDto.setAmount("CHF 1000");
-////    transactionDto.setIban("CH93-0000-0000-0000-0000-0");
-////    transactionDto.setDate(LocalDate.parse("01-22-2022"));
-////    transactionDto.setDescription("Online payment CHF");
-//
-////    RestTemplate restTemplate = new RestTemplate();
-////    HttpEntity<TransactionDto> request = new HttpEntity<>(transactionDto);
-//
-////    ResponseEntity<TransactionDto> response = restTemplate.postForEntity("http://localhost:" + port + expectedPath, request, TransactionDto.class);
-//  }
-//
-//  @Test
-//  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
-//  public void assertCallingGetTransaction_thenReturnOK() {
-//    String expectedPath = "/transactions";
-
-//    WireMock.stubFor(
-//      WireMock.get(WireMock.urlEqualTo(expectedPath))
-//        .willReturn(
-//          WireMock.aResponse().withStatus(HttpStatus.OK.value())
-//            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-//    );
-
-//    mockMvc.perform(MockMvcRequestBuilders.post(""))
-//    ResponseEntity<String> response = mockMvc.getForEntity("http://localhost:" + port + expectedPath, String.class);
-
-//    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-//    System.out.println(response.getBody());
-//    WireMock.verify(WireMock.getRequestedFor(WireMock.urlMatching(expectedPath)));
-//  }
 
 
 }

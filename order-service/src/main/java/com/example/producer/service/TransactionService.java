@@ -1,6 +1,5 @@
 package com.example.producer.service;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,8 +36,6 @@ public class TransactionService {
   public Page<TransactionDto> getAllTransaction(Pageable pageable) {
     Page<Transactions> transactions = transactionRepository.findAll(pageable);
 
-    System.out.println(transactions.getContent());
-
     if (!transactions.isEmpty()) {
       return new PageImpl<>(
         transactions.stream().map(transaction -> modelMapper.map(transaction, TransactionDto.class)).collect(Collectors.toList()),
@@ -47,11 +44,7 @@ public class TransactionService {
       );
     }
 
-    return new PageImpl<>(
-      Collections.emptyList(),
-      PageRequest.of(transactions.getTotalPages(), transactions.getSize(), transactions.getSort()),
-      transactions.getTotalElements()
-    );
+    return Page.empty();
   }
 
   public Optional<TransactionDto> getTransaction(UUID id) {

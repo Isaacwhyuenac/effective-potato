@@ -1,4 +1,4 @@
-package com.example.producer.controller;
+package com.example.producer;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
@@ -19,10 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.producer.Application;
+import com.example.producer.controller.TransactionsController;
 import com.example.producer.domain.Transactions;
 import com.example.producer.dto.TransactionDto;
 import com.example.producer.mq.send.SendMessage;
@@ -33,14 +34,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest(
-  classes = {Application.class},
   webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @AutoConfigureMessageVerifier
-@EmbeddedKafka(partitions = 1, topics = {"transactions"})
+@EmbeddedKafka(partitions = 1, topics = {"transaction"})
 @ExtendWith(SpringExtension.class)
-//@Import(value = {JacksonConfig.class})
-@ActiveProfiles("test")
+@AutoConfigureMockMvc
 public class BaseClass {
 
   public static final UUID transactionId = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
@@ -86,21 +85,26 @@ public class BaseClass {
     List<Transactions> expected = Arrays.asList(transactions);
     Page transactionsPage = new PageImpl<>(expected);
 
-    Mockito.doNothing().when(sendMessage).send(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(Object.class));
-    Mockito.when(transactionRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(transactionsPage);
-    Mockito.when(transactionRepository.findById(transactionId)).thenReturn(Optional.ofNullable(transactions));
-    Mockito.when(transactionRepository.save(transactions)).thenReturn(transactions);
+    Mockito.doNothing().when(this.sendMessage).send(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(Object.class));
+    Mockito.when(this.transactionRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(transactionsPage);
+    Mockito.when(this.transactionRepository.findById(transactionId)).thenReturn(Optional.ofNullable(transactions));
+    Mockito.when(this.transactionRepository.save(transactions)).thenReturn(transactions);
 
 //    Mockito.when(transactionService.postTransaction(transactionDto)).thenReturn(transactionId);
 
-    RestAssuredMockMvc.standaloneSetup(transactionsController);
+    RestAssuredMockMvc.standaloneSetup(this.transactionsController);
+  }
+
+  @AfterEach
+  public void cleanup() {
+    Mockito.reset(this.transactionRepository);
+    Mockito.reset(this.sendMessage);
   }
 
   public void sendMessage() {
-    transactionService.postTransaction(transactionDto);
+    this.transactionService.postTransaction(transactionDto);
 //    sendMessage.send("transactions", transactionDto.getIban(), transactionDto);
   }
-
 
 
 }

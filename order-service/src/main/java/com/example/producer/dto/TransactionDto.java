@@ -33,8 +33,9 @@ public class TransactionDto {
   @JsonFormat(pattern = DAY_TIME_PATTERN, shape = JsonFormat.Shape.STRING)
   @DateTimeFormat(pattern = DAY_TIME_PATTERN, iso = DateTimeFormat.ISO.DATE)
   @JsonSerialize(using = LocalDateSerializer.class)
-  @JsonDeserialize(using= LocalDateDeserializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
   private LocalDate date;
 
   private String description;
+
 }

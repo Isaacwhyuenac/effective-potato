@@ -13,8 +13,6 @@ import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.producer.controller.TransactionsController;
-
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 //@Configuration
@@ -31,8 +29,8 @@ public class SecurityConfig {
    http
      .csrf().disable()
      .authorizeRequests()
-//     .mvcMatchers("/transactions").permitAll()
-     .mvcMatchers("/transactions").authenticated()
+     .mvcMatchers("/transactions").permitAll()
+//     .mvcMatchers("/transactions").authenticated()
      .mvcMatchers("/v3/api-docs").permitAll()
      .and()
      .oauth2ResourceServer().jwt();

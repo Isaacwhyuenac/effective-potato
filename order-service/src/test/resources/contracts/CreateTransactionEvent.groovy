@@ -22,7 +22,7 @@ Contract.make {
     }
 
     outputMessage {
-        sentTo("transactions")
+        sentTo("transaction")
         body(json)
 //        headers {
 //            header('kafka_messageKey', 'id-6b8bdc7d-a91a-4e3f-a299-cb621590f337')

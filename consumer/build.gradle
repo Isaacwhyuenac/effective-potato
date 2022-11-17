@@ -22,15 +22,16 @@ configurations {
 
 repositories {
     mavenLocal()
-
-    maven { url 'https://repo.spring.io/release' }
     mavenCentral()
     google()
+    maven { url 'https://repo.spring.io/release' }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/release" }
 }
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
-    set('springCloudVersion', "2021.0.4")
+    set('springCloudVersion', "${BOM_VERSION}")
 }
 
 dependencies {
@@ -53,7 +54,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+//    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
     testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
     testImplementation "org.awaitility:awaitility:3.1.6"
 

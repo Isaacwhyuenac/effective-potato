@@ -40,7 +40,7 @@ jobs:
       - image: cimg/postgres:15.0
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_DB: circle_test
+          POSTGRES_DB: cache
     steps:
       - checkout
       - attach_workspace:
