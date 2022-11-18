@@ -33,9 +33,15 @@ public class TransactionService {
 
   private final NewTopic transactionTopic;
 
+  /**
+   *
+   * @param pageable
+   * @return list of transaction records
+   * @see Page
+   */
   public Page<TransactionDto> getAllTransaction(Pageable pageable) {
     Page<Transactions> transactions = transactionRepository.findAll(pageable);
-
+    log.info("Querying [pagenumber: " + pageable.getPageNumber() + "]");
     if (!transactions.isEmpty()) {
       return new PageImpl<>(
         transactions.stream().map(transaction -> modelMapper.map(transaction, TransactionDto.class)).collect(Collectors.toList()),
@@ -47,22 +53,34 @@ public class TransactionService {
     return Page.empty();
   }
 
+  /**
+   *
+   * @param id
+   * @return transaction record if exist or null
+   */
   public Optional<TransactionDto> getTransaction(UUID id) {
+    log.info("Querying [transactionId: " + id + "]");
     Optional<Transactions> transactionsOptional = transactionRepository.findById(id);
 
     if (transactionsOptional.isPresent()) {
       return Optional.of(modelMapper.map(transactionsOptional.get(), TransactionDto.class));
     }
 
+    log.info("[transactionId: " + id + "] no item match");
     return Optional.empty();
   }
 
+  /**
+   *
+   * @param transactionDto
+   * @return uuid of the transaction record
+   */
   public UUID postTransaction(TransactionDto transactionDto) {
-
     Transactions transactions = modelMapper.map(transactionDto, Transactions.class);
     UUID uuid = UUID.randomUUID();
-
     transactions.setId(uuid);
+
+    log.info("[transactionId: " + uuid + "] is now sent to the consumer to the consumer service");
 
     sendMessage.send(transactionTopic.name(), transactions.getIban(), transactions);
 

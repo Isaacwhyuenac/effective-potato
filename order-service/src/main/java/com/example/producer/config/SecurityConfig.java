@@ -1,10 +1,8 @@
 package com.example.producer.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -15,18 +13,18 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+//@Profile(value = {"development", "production"})
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class SecurityConfig {
 
- @ConditionalOnMissingBean
- @Bean
- public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
-   return new HandlerMappingIntrospector();
- }
+// @ConditionalOnMissingBean
+// @Bean
+// public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+//   return new HandlerMappingIntrospector();
+// }
 
  @Bean
  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -17,6 +17,12 @@ public class SendMessage {
   @Autowired
   private KafkaTemplate<Object, Object> kafkaTemplate;
 
+  /**
+   *
+   * @param topic Kafka Topic
+   * @param key The key which determines which kafka partition to put message
+   * @param payload The payload
+   */
   public void send(String topic, String key, Object payload) {
 
     ListenableFuture<SendResult<Object, Object>> future = kafkaTemplate.send(topic, key ,payload);

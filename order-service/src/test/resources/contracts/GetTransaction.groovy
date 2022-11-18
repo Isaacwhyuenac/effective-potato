@@ -29,6 +29,5 @@ Contract.make {
                 description: "Online payment CHF"
         )
 
-
     }
 }

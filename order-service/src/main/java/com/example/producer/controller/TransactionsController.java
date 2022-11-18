@@ -73,18 +73,11 @@ public class TransactionsController {
   @Operation(summary = "Create Transactions", tags = {"POST", "Transaction"})
   @PostMapping
   public ResponseEntity<Void> createTransaction(@Valid @RequestBody TransactionDto transactionDto) {
-    log.info(transactionDto.toString());
-
     UUID uuid = transactionService.postTransaction(transactionDto);
 
     URI location = MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).getTransaction(uuid)).build(uuid);
     return ResponseEntity.created(location).build();
   }
 
-  @PostMapping(value = "/test")
-  public ResponseEntity<String> test(@RequestBody String string) {
-
-    return ResponseEntity.ok().body(string);
-  }
 
 }

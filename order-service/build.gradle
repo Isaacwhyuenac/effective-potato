@@ -49,9 +49,9 @@ contracts {
         baseClassForTests "com.example.producer.BaseClass"
 }
 
-contractTest {
-    useJUnitPlatform()
-}
+//contractTest {
+//    useJUnitPlatform()
+//}
 
 openApi {
     // apiDocsUrl.set("https://localhost:9000/api/docs")

@@ -8,7 +8,7 @@ kafka:
 
 spring:
   application:
-    name: synpulse
+    name: producer
   security:
 #    user:
 #      password: Test12345_

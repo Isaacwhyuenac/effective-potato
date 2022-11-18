@@ -13,14 +13,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -34,10 +34,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@AutoConfigureMessageVerifier
-@EmbeddedKafka(partitions = 1, topics = {"transaction"})
+@SpringBootTest(
+  classes = {Application.class},
+  webEnvironment = SpringBootTest.WebEnvironment.NONE,
+  // properties = {
+  //   "spring.security.user.name=testuser"
+  // }
+)
 @ExtendWith(SpringExtension.class)
+//@EmbeddedKafka(partitions = 1, topics = {"transaction"})
+@AutoConfigureMessageVerifier
 @ActiveProfiles("test")
+// @AutoConfigureJson
 public class BaseClass {
 
   public static final UUID transactionId = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
@@ -109,8 +117,6 @@ public class BaseClass {
     Mockito.reset(this.sendMessage);
   }
 
-  @Autowired
-  private KafkaTemplate<Object, Object> kafkaTemplate;
 
   public void sendMessage() {
     this.transactionService.postTransaction(transactionDto);
