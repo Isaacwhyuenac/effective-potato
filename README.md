@@ -1,6 +1,6 @@
 # producer
 
-[Circleci Environment](https://app.circleci.com/pipelines/github/Isaacwhyuenac/spring-cloud-contract-poc)
+[![Isaacwhyuenac/spring-cloud-contract-poc](https://app.circleci.com/pipelines/github/Isaacwhyuenac/spring-cloud-contract-poc.sv?style=svg)](https://app.circleci.com/pipelines/github/Isaacwhyuenac/spring-cloud-contract-poc)
 
 The repo consists of
 
