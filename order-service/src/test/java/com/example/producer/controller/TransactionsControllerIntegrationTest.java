@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.MOCK
 )
-//@AutoConfigureMockMvc
+@AutoConfigureMockMvc
 class TransactionsControllerIntegrationTest extends BaseClass {
 
 //  @StubRunnerPort("order-service")

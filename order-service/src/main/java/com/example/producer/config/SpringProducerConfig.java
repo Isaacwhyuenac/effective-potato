@@ -19,4 +19,6 @@ public class SpringProducerConfig {
     return new NewTopic(topic, 1, (short) 1);
   }
 
+
+
 }

@@ -13,14 +13,15 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.producer.controller.TransactionsController;
@@ -33,13 +34,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@SpringBootTest(
-  webEnvironment = SpringBootTest.WebEnvironment.NONE
-)
 @AutoConfigureMessageVerifier
 @EmbeddedKafka(partitions = 1, topics = {"transaction"})
 @ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class BaseClass {
 
   public static final UUID transactionId = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
@@ -53,6 +51,9 @@ public class BaseClass {
     transactionDto.setDate(LocalDate.of(2020, 1, 22));
     transactionDto.setDescription("Online payment CHF");
   }
+
+  @Autowired
+  private Environment environment;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -80,6 +81,13 @@ public class BaseClass {
 
   @BeforeEach
   public void setup() {
+
+    String[] activeProfiles = environment.getActiveProfiles();
+
+    System.out.println("================================================");
+    System.out.println(Arrays.toString(activeProfiles));
+
+
     Transactions transactions = modelMapper.map(transactionDto, Transactions.class);
 
     List<Transactions> expected = Arrays.asList(transactions);
@@ -100,6 +108,9 @@ public class BaseClass {
     Mockito.reset(this.transactionRepository);
     Mockito.reset(this.sendMessage);
   }
+
+  @Autowired
+  private KafkaTemplate<Object, Object> kafkaTemplate;
 
   public void sendMessage() {
     this.transactionService.postTransaction(transactionDto);
