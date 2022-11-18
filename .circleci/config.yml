@@ -15,7 +15,7 @@ jobs:
           key: v1-gradle-cache-{{ checksum "settings.gradle" }}
       - run:
           name: Install dependencies
-          command: ./gradlew build -x test
+          command: ./gradlew :consumer:build && ./gradlew :order-service:build
       - save_cache:
           paths:
             - ~/.gradle/wrapper
