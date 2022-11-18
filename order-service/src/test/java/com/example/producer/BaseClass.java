@@ -13,7 +13,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
@@ -36,7 +35,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest(
   classes = {Application.class},
-  webEnvironment = SpringBootTest.WebEnvironment.NONE,
+  webEnvironment = SpringBootTest.WebEnvironment.NONE
   // properties = {
   //   "spring.security.user.name=testuser"
   // }
