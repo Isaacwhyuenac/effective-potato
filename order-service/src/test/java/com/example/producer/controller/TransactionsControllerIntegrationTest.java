@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,7 +33,7 @@ class TransactionsControllerIntegrationTest extends BaseClass {
   private MockMvc mockMvc;
 
   @Test
-  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
+//  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
   public void shouldCreateTransaction() throws Exception {
     this.mockMvc.perform(
         MockMvcRequestBuilders.post("/transactions")
@@ -48,7 +47,7 @@ class TransactionsControllerIntegrationTest extends BaseClass {
   }
 
   @Test
-  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
+//  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
   public void shouldReturnAllTransaction() throws Exception {
     this.mockMvc.perform(MockMvcRequestBuilders.get("/transactions"))
       .andExpect(MockMvcResultMatchers.status().isOk())
@@ -61,7 +60,7 @@ class TransactionsControllerIntegrationTest extends BaseClass {
   }
 
   @Test
-  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
+//  @WithMockUser(username = "testUser", authorities = {"SCOPE_read:messages"})
   public void shouldReturnTransactionById() throws Exception {
     this.mockMvc.perform(MockMvcRequestBuilders.get("/transactions/" + transactionId))
       .andExpect(MockMvcResultMatchers.status().isOk())

@@ -1,101 +1,101 @@
-package com.example.producer.config;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
-import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.web.SecurityFilterChain;
-
-@EnableWebSecurity
-//@Profile(value = {"development", "production"})
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
-@Configuration
-public class SecurityConfig {
-
-// @ConditionalOnMissingBean
+//package com.example.producer.config;
+//
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+//import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+//import org.springframework.security.oauth2.jwt.Jwt;
+//import org.springframework.security.oauth2.jwt.JwtDecoder;
+//import org.springframework.security.oauth2.jwt.JwtDecoders;
+//import org.springframework.security.oauth2.jwt.JwtValidators;
+//import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+//import org.springframework.security.web.SecurityFilterChain;
+//
+//@EnableWebSecurity
+////@Profile(value = {"development", "production"})
+////@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+//@Configuration
+//public class SecurityConfig {
+//
+//// @ConditionalOnMissingBean
+//// @Bean
+//// public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+////   return new HandlerMappingIntrospector();
+//// }
+//
 // @Bean
-// public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
-//   return new HandlerMappingIntrospector();
+// public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+////    http
+////      .authorizeHttpRequests((authz) -> authz
+////        .anyRequest().authenticated()
+////      )
+////      .httpBasic(Customizer.withDefaults());
+//
+//   http
+//     .csrf().disable()
+//     .authorizeRequests()
+//     .mvcMatchers("/transactions").permitAll()
+////     .mvcMatchers("/transactions").authenticated()
+//     .mvcMatchers("/v3/api-docs").permitAll()
+//     .and()
+//     .oauth2ResourceServer().jwt();
+//
+//   return http.build();
 // }
-
- @Bean
- public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//    http
-//      .authorizeHttpRequests((authz) -> authz
-//        .anyRequest().authenticated()
-//      )
-//      .httpBasic(Customizer.withDefaults());
-
-   http
-     .csrf().disable()
-     .authorizeRequests()
-     .mvcMatchers("/transactions").permitAll()
-//     .mvcMatchers("/transactions").authenticated()
-     .mvcMatchers("/v3/api-docs").permitAll()
-     .and()
-     .oauth2ResourceServer().jwt();
-
-   return http.build();
- }
-
- @Value("${auth0.audience}")
- private String audience;
-
- @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
- private String issuer;
-
- @Bean
- public JwtDecoder jwtDecoder() {
-   NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
-
-   OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
-   OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
-   OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-   jwtDecoder.setJwtValidator(withAudience);
-
-   return jwtDecoder;
- }
-}
-
-// @EnableWebSecurity
-// public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-//   @Value("${auth0.audience}")
-//   private String audience;
-
-//   @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
-//   private String issuer;
-
-//   @Override
-//   protected void configure(HttpSecurity http) throws Exception {
-//     http.csrf().disable()
-//       .authorizeRequests()
-//       .anyRequest().authenticated()
-//       .and()
-//       .oauth2ResourceServer().jwt();
-//   }
-
-//   @Bean
-//   public JwtDecoder jwtDecoder() {
-//     NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
-
-//     OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
-//     OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
-//     OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-//     jwtDecoder.setJwtValidator(withAudience);
-
-//     return jwtDecoder;
-//   }
+//
+// @Value("${auth0.audience}")
+// private String audience;
+//
+// @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+// private String issuer;
+//
+// @Bean
+// public JwtDecoder jwtDecoder() {
+//   NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
+//
+//   OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
+//   OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+//   OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+//
+//   jwtDecoder.setJwtValidator(withAudience);
+//
+//   return jwtDecoder;
 // }
-
-
+//}
+//
+//// @EnableWebSecurity
+//// public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//
+////   @Value("${auth0.audience}")
+////   private String audience;
+//
+////   @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+////   private String issuer;
+//
+////   @Override
+////   protected void configure(HttpSecurity http) throws Exception {
+////     http.csrf().disable()
+////       .authorizeRequests()
+////       .anyRequest().authenticated()
+////       .and()
+////       .oauth2ResourceServer().jwt();
+////   }
+//
+////   @Bean
+////   public JwtDecoder jwtDecoder() {
+////     NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
+//
+////     OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
+////     OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+////     OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+//
+////     jwtDecoder.setJwtValidator(withAudience);
+//
+////     return jwtDecoder;
+////   }
+//// }
+//
+//
