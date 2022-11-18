@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -60,9 +59,6 @@ public class BaseClass {
   }
 
   @Autowired
-  private Environment environment;
-
-  @Autowired
   private ObjectMapper objectMapper;
 
   @Autowired
@@ -88,12 +84,6 @@ public class BaseClass {
 
   @BeforeEach
   public void setup() {
-
-    String[] activeProfiles = environment.getActiveProfiles();
-
-    System.out.println("================================================");
-    System.out.println(Arrays.toString(activeProfiles));
-
 
     Transactions transactions = modelMapper.map(transactionDto, Transactions.class);
 
