@@ -41,6 +41,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: cache
+          POSTGRES_PASSWORD: postgres
     steps:
       - checkout
       - attach_workspace:
