@@ -89,7 +89,7 @@ jobs:
       - run:
           name: Assemble JAR
           command: |
-            docker-compose build .
+            docker-compose build
       # This will be empty for all nodes except the first one
       - store_artifacts:
           path: build/libs
@@ -100,5 +100,5 @@ workflows:
     jobs:
     - build
     - test:
-        requires:
-          - build
+#        requires:
+#          - build
