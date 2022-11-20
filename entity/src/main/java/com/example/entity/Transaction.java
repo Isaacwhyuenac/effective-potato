@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -34,6 +35,7 @@ public class Transaction implements Serializable {
   @Id
   private UUID id;
 
+  @NotBlank
   @Column
   private String amount;
 

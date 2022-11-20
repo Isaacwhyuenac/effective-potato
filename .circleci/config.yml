@@ -12,15 +12,30 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_DB: cache
           POSTGRES_PASSWORD: postgres
+      - image: confluentinc/cp-kafka:7.3.0
+        environment:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      - image: confluentinc/cp-zookeeper:7.3.0
+        environment:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
     steps:
       - checkout
       - restore_cache:
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
           key: v1-gradle-cache-{{ checksum "settings.gradle" }}
+      - build_contract:
+          name: Build consumer contract
+          command: ./gradlew :consumer:build :consumer:publishToMavenLocal
       - run:
           name: Install dependencies
-          command: ./gradlew :consumer:build && ./gradlew :order-service:build
+          command: ./gradlew build
       - save_cache:
           paths:
             - ~/.gradle/wrapper

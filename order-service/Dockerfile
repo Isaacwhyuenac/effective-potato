@@ -4,4 +4,4 @@ WORKDIR /usr/home
 
 COPY . .
 
-RUN ./gradlew build && java -jar build/libs/order-service-0.0.1-SNAPSHOT.jar
+RUN java -jar build/libs/order-service-0.0.1-SNAPSHOT.jar

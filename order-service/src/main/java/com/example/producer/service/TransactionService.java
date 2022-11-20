@@ -3,7 +3,6 @@ package com.example.producer.service;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -20,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.entity.Transaction;
 import com.example.producer.mq.send.SendMessage;
-import com.example.producer.utils.RestResponsePage;
+import com.example.producer.utils.PageUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,17 +36,16 @@ public class TransactionService {
   @Autowired
   private SendMessage sendMessage;
 
-  @Autowired
-  private NewTopic transactionTopic;
+  @Value("${kafka.topic.transaction:transaction}")
+  private String transactionTopic;
+
 
   public TransactionService(
     RestTemplateBuilder restTemplateBuilder,
-    SendMessage sendMessage,
-    NewTopic transactionTopic
+    SendMessage sendMessage
   ) {
     restTemplate = restTemplateBuilder.build();
     sendMessage = sendMessage;
-    transactionTopic = transactionTopic;
   }
 
   /**
@@ -55,7 +53,7 @@ public class TransactionService {
    * @return list of transaction records
    * @see Page
    */
-  public Page<Transaction> getAllTransactions(Pageable pageable) {
+  public PageUtil<Transaction> getAllTransactions(Pageable pageable) {
 //    Page<Transactions> transactions = transactionRepository.findAll(pageable);
     log.info("Querying [pagenumber: " + pageable.getPageNumber() + "]");
 
@@ -63,15 +61,14 @@ public class TransactionService {
     headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
     headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-    ResponseEntity<RestResponsePage<Transaction>> response = this.restTemplate.exchange(
-      consumerServiceUrl + "/transaction",
+    ResponseEntity<PageUtil<Transaction>> response = this.restTemplate.exchange(
+      consumerServiceUrl + "/transaction?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize(),
       HttpMethod.GET,
-      new HttpEntity<>(pageable, headers),
+      new HttpEntity<>(headers),
       new ParameterizedTypeReference<>() {
       }
     );
 
-    System.out.println(response.getBody());
     return response.getBody();
   }
 
@@ -111,7 +108,7 @@ public class TransactionService {
 
     log.info("[transactionId: " + uuid + "] is now sent to the consumer to the consumer service");
 
-    sendMessage.send(transactionTopic.name(), transaction.getIban(), transaction);
+    sendMessage.send(transactionTopic, transaction.getIban(), transaction);
 
     return uuid;
   }

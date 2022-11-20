@@ -1,7 +1,5 @@
 package com.example.producer.config;
 
-import java.util.Optional;
-
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,13 +27,11 @@ public class SpringProducerConfig {
 
   @Bean
   public NewTopic transactionTopic(
-    @Value("${kafka.topic.transaction:transaction}"
-    ) Optional<String> transactionTopic) {
-    String topic = transactionTopic.isPresent() ? transactionTopic.get() : "transaction";
+    @Value("${kafka.topic.transaction:transaction}") String transactionTopic
+  ) {
 
-    return new NewTopic(topic, 1, (short) 1);
+    return new NewTopic(transactionTopic, 1, (short) 1);
   }
-
 
 
 }

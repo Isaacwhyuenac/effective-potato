@@ -17,13 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.consumer.controller.TransactionController;
-import com.example.consumer.domain.Transaction;
 import com.example.consumer.repository.TransactionRepository;
+import com.example.entity.Transaction;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest(
-//  classes = {ConsumerApplication.class},
   webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 //@AutoConfigureMessageVerifier

@@ -2,6 +2,7 @@ package com.example.producer.controller;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,12 +15,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,17 +31,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.entity.Transaction;
 import com.example.producer.service.TransactionService;
+import com.example.producer.utils.PageUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.With;
 import lombok.extern.slf4j.Slf4j;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(value = {SpringExtension.class})
 @WebMvcTest(controllers = {TransactionController.class})
 @Slf4j
 class TransactionControllerTest {
+
+  private static final String MOCKUSERNAME = "testUser";
 
   @MockBean
   private TransactionService transactionService;
@@ -53,6 +55,7 @@ class TransactionControllerTest {
   private final String apiPath = "/transaction";
 
   @Test
+  @WithMockUser(username = MOCKUSERNAME)
   public void getAllTransaction() throws Exception {
     UUID id = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
     String amount = "CHF 1000";
@@ -60,17 +63,19 @@ class TransactionControllerTest {
     LocalDate localDate = LocalDate.of(2020, 1, 22);
     String description = "Online payment CHF";
 
+    List<Transaction> content = Arrays.asList(
+      Transaction.builder().id(id).amount(amount).iban(iban).date(localDate).description(description).build(),
+      Transaction.builder().id(UUID.randomUUID()).amount(amount).iban(iban).date(localDate).description(description).build(),
+      Transaction.builder().id(UUID.randomUUID()).amount(amount).iban(iban).date(localDate).description(description).build()
+    );
+
+    PageUtil<Transaction> transactionPageUtil = new PageUtil<>(1, 1, content, content.size());
+
     BDDMockito.given(
         this.transactionService.getAllTransactions(Mockito.any(Pageable.class))
       )
       .willReturn(
-        new PageImpl<>(
-          Arrays.asList(
-            Transaction.builder().id(id).amount(amount).iban(iban).date(localDate).description(description).build(),
-            Transaction.builder().id(UUID.randomUUID()).amount(amount).iban(iban).date(localDate).description(description).build(),
-            Transaction.builder().id(UUID.randomUUID()).amount(amount).iban(iban).date(localDate).description(description).build()
-          )
-        )
+        transactionPageUtil
       );
 
     MvcResult mvcResult = this.mockMvc
@@ -91,7 +96,7 @@ class TransactionControllerTest {
 
 
   @Test
-  @WithMockUser(username = "testUser")
+  @WithMockUser(username = MOCKUSERNAME)
   public void getTransaction() throws Exception {
     UUID id = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
     String amount = "CHF 1000";

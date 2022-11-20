@@ -20,7 +20,10 @@ public class JacksonConfig {
         DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
         DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
       )
-      .featuresToEnable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+      .featuresToEnable(
+        DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
+        DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT
+      )
       .indentOutput(true);
   }
 }

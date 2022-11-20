@@ -36,7 +36,7 @@ public class SwaggerConfig {
   public OpenAPI customOpenAPI() {
     return new OpenAPI()
       .components(new Components())
-      .info(new Info().title("Foo API").version("1.0.0")
+      .info(new Info().title("Order Service API").version("1.0.0")
         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
   }
 

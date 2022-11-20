@@ -1,26 +1,23 @@
-package com.example.producer.utils;
+package com.example.consumer.utils;
 
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.text.MessageFormat;
 
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.util.UriComponentsBuilder;
+
 /**
  * Utility class for handling pagination.
- *
- *
-
+ * <p>
+ * <p>
+ * <p>
  * Pagination uses the same principles as the GitHub API,
  * and follow RFC 5988 (Link header).
  */
 public final class PaginationUtil {
 
-  private static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
+  public static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
   private static final String HEADER_LINK_FORMAT = "<{0}>; rel=\"{1}\"";
 
   private PaginationUtil() {
@@ -30,11 +27,11 @@ public final class PaginationUtil {
    * Generate pagination headers for a Spring Data {@link Page} object.
    *
    * @param uriBuilder The URI builder.
-   * @param page The page.
-   * @param  The type of object.
+   * @param page       The page.
+   * @param The        type of object.
    * @return http header.
    */
-  public static  HttpHeaders generatePaginationHttpHeaders(UriComponentsBuilder uriBuilder, Page page) {
+  public static HttpHeaders generatePaginationHttpHeaders(UriComponentsBuilder uriBuilder, Page page) {
     HttpHeaders headers = new HttpHeaders();
     headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
     int pageNumber = page.getNumber();

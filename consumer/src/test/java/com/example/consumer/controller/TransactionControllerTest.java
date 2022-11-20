@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.consumer.service.TransactionService;
+import com.example.consumer.utils.PaginationUtil;
 import com.example.entity.Transaction;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +76,7 @@ class TransactionControllerTest {
           .accept(MediaType.APPLICATION_JSON)
       )
       .andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.header().exists(PaginationUtil.HEADER_X_TOTAL_COUNT))
       .andExpect(MockMvcResultMatchers.jsonPath("$.content[*].id", CoreMatchers.hasItem(id.toString())))
       .andReturn();
 
