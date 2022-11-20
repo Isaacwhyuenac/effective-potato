@@ -29,7 +29,7 @@ public class SpringProducerConfig {
 
   @Bean
   public NewTopic transactionTopic(
-    @Value("${kafka.topic.transaction:#{null}}"
+    @Value("${kafka.topic.transaction:transaction}"
     ) Optional<String> transactionTopic) {
     String topic = transactionTopic.isPresent() ? transactionTopic.get() : "transaction";
 

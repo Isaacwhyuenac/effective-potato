@@ -16,3 +16,4 @@ rootProject.name = "contract"
 
 include 'order-service'
 include 'consumer'
+include 'entity'

@@ -4,14 +4,15 @@ auth0:
 kafka:
   topic:
     transaction: transaction
-
+services:
+  consumer-url: http://localhost:8081
 
 spring:
   application:
     name: producer
   security:
-#    user:
-#      password: Test12345_
+    #    user:
+    #      password: Test12345_
     oauth2:
       resourceserver:
         jwt:
@@ -22,16 +23,18 @@ spring:
       - localhost:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:postgresql://localhost:5432/cache?sslmode=disable
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      schema: public
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: update
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/cache?sslmode=disable
+#    username: postgres
+#    password: postgres
+#    driver-class-name: org.postgresql.Driver
+#    hikari:
+#      schema: public

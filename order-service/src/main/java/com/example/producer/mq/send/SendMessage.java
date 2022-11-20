@@ -8,6 +8,8 @@ import org.springframework.util.concurrent.FailureCallback;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.SuccessCallback;
 
+import com.example.entity.Transaction;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -15,18 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 public class SendMessage {
 
   @Autowired
-  private KafkaTemplate<Object, Object> kafkaTemplate;
+  private KafkaTemplate<String, Transaction> kafkaTemplate;
 
   /**
-   *
-   * @param topic Kafka Topic
-   * @param key The key which determines which kafka partition to put message
+   * @param topic   Kafka Topic
+   * @param key     The key which determines which kafka partition to put message
    * @param payload The payload
    */
-  public void send(String topic, String key, Object payload) {
+  public void send(String topic, String key, Transaction payload) {
 
-    ListenableFuture<SendResult<Object, Object>> future = kafkaTemplate.send(topic, key ,payload);
-    SuccessCallback<SendResult<Object, Object>> successCallback = sendResult -> {
+    ListenableFuture<SendResult<String, Transaction>> future = kafkaTemplate.send(topic, key, payload);
+    SuccessCallback<SendResult<String, Transaction>> successCallback = sendResult -> {
       log.info("Sent payload='{}' with key='{}' to topic-partition@offset='{}'", payload, key, sendResult.getRecordMetadata().toString());
     };
     FailureCallback failureCallback = throwable -> {

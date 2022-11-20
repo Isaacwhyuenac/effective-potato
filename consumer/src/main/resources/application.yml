@@ -11,9 +11,10 @@ spring:
       - localhost:29092
     consumer:
       enable-auto-commit: false
-#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      isolation-level: read_committed
+
       properties:
         "spring.json.trusted.packages": "*"
   jpa:

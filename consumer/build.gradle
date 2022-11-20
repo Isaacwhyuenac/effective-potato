@@ -1,11 +1,25 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url 'https://repo.spring.io/release' }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/release" }
+    }
+}
+
 plugins {
     id 'java'
+    id 'maven-publish'
     id 'groovy'
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     // id 'org.springframework.experimental.aot' version '0.12.1'
 //    id 'org.hibernate.orm'
-    // id "org.springframework.cloud.contract" version "3.1.5"
+    id "org.springframework.cloud.contract" version "3.1.5"
 
 }
 
@@ -34,30 +48,67 @@ ext {
     set('springCloudVersion', "${BOM_VERSION}")
 }
 
+contracts {
+    testFramework = TestFramework.JUNIT5
+    baseClassForTests = "com.example.consumer.BaseClass"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact bootJar
+
+            artifact verifierStubsJar
+
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+        }
+
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.kafka:spring-kafka'
 
-    implementation 'org.codehaus.groovy:groovy-all:2.4.6'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.7'
 
-    implementation 'org.modelmapper.extensions:modelmapper-spring:3.0.0'
-    implementation 'org.modelmapper.extensions:modelmapper-jackson:3.0.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+//    implementation 'org.modelmapper.extensions:modelmapper-spring:3.0.0'
+//    implementation 'org.modelmapper.extensions:modelmapper-jackson:3.0.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+    implementation project(':entity')
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testRuntimeOnly 'com.h2database:h2'
+
+    testImplementation 'org.junit.platform:junit-platform-engine'
+    testImplementation 'org.junit.platform:junit-platform-launcher'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
-    // testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
+    testImplementation "org.springframework.cloud:spring-cloud-starter-contract-verifier"
     testImplementation "org.springframework.cloud:spring-cloud-starter-contract-stub-runner"
     testImplementation "org.awaitility:awaitility:3.1.6"
+    testImplementation 'io.rest-assured:rest-assured:4.5.1'
+//    testImplementation 'io.rest-assured:spring-mock-mvc:4.5.1'
+    testImplementation "io.rest-assured:json-path:4.5.1"
+
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
 //    testImplementation project(":order-service")
 }

@@ -2,87 +2,116 @@ package com.example.producer.service;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.kafka.clients.admin.NewTopic;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import com.example.producer.domain.Transactions;
-import com.example.producer.dto.TransactionDto;
+import com.example.entity.Transaction;
 import com.example.producer.mq.send.SendMessage;
-import com.example.producer.repository.TransactionRepository;
+import com.example.producer.utils.RestResponsePage;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class TransactionService {
 
-  private final TransactionRepository transactionRepository;
+  @Value("${services.consumer-url}")
+  private String consumerServiceUrl;
 
-  private final ModelMapper modelMapper;
+  private RestTemplate restTemplate;
 
-  private final SendMessage sendMessage;
 
-  private final NewTopic transactionTopic;
+  @Autowired
+  private SendMessage sendMessage;
+
+  @Autowired
+  private NewTopic transactionTopic;
+
+  public TransactionService(
+    RestTemplateBuilder restTemplateBuilder,
+    SendMessage sendMessage,
+    NewTopic transactionTopic
+  ) {
+    restTemplate = restTemplateBuilder.build();
+    sendMessage = sendMessage;
+    transactionTopic = transactionTopic;
+  }
 
   /**
-   *
    * @param pageable
    * @return list of transaction records
    * @see Page
    */
-  public Page<TransactionDto> getAllTransaction(Pageable pageable) {
-    Page<Transactions> transactions = transactionRepository.findAll(pageable);
+  public Page<Transaction> getAllTransactions(Pageable pageable) {
+//    Page<Transactions> transactions = transactionRepository.findAll(pageable);
     log.info("Querying [pagenumber: " + pageable.getPageNumber() + "]");
-    if (!transactions.isEmpty()) {
-      return new PageImpl<>(
-        transactions.stream().map(transaction -> modelMapper.map(transaction, TransactionDto.class)).collect(Collectors.toList()),
-        PageRequest.of(transactions.getTotalPages(), transactions.getSize(), transactions.getSort()),
-        transactions.getTotalElements()
-      );
-    }
 
-    return Page.empty();
+    HttpHeaders headers = new HttpHeaders();
+    headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+    headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+    ResponseEntity<RestResponsePage<Transaction>> response = this.restTemplate.exchange(
+      consumerServiceUrl + "/transaction",
+      HttpMethod.GET,
+      new HttpEntity<>(pageable, headers),
+      new ParameterizedTypeReference<>() {
+      }
+    );
+
+    System.out.println(response.getBody());
+    return response.getBody();
   }
 
   /**
-   *
    * @param id
    * @return transaction record if exist or null
    */
-  public Optional<TransactionDto> getTransaction(UUID id) {
+  public Optional<Transaction> getTransaction(UUID id) {
     log.info("Querying [transactionId: " + id + "]");
-    Optional<Transactions> transactionsOptional = transactionRepository.findById(id);
 
-    if (transactionsOptional.isPresent()) {
-      return Optional.of(modelMapper.map(transactionsOptional.get(), TransactionDto.class));
-    }
+
+    log.info("apiPath " + consumerServiceUrl);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+    headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+
+    ResponseEntity<Optional<Transaction>> response = this.restTemplate.exchange(
+      consumerServiceUrl + "/transaction/" + id,
+      HttpMethod.GET,
+      new HttpEntity<>(headers),
+      new ParameterizedTypeReference<>() {
+      }
+    );
 
     log.info("[transactionId: " + id + "] no item match");
-    return Optional.empty();
+    return response.getBody();
   }
 
   /**
-   *
-   * @param transactionDto
+   * @param transaction
    * @return uuid of the transaction record
    */
-  public UUID postTransaction(TransactionDto transactionDto) {
-    Transactions transactions = modelMapper.map(transactionDto, Transactions.class);
+  public UUID postTransaction(Transaction transaction) {
     UUID uuid = UUID.randomUUID();
-    transactions.setId(uuid);
+    transaction.setId(uuid);
 
     log.info("[transactionId: " + uuid + "] is now sent to the consumer to the consumer service");
 
-    sendMessage.send(transactionTopic.name(), transactions.getIban(), transactions);
+    sendMessage.send(transactionTopic.name(), transaction.getIban(), transaction);
 
     return uuid;
   }

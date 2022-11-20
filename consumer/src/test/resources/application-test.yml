@@ -1,5 +1,5 @@
-producer:
-  port: 8100
+#producer:
+#  port: 8100
 
 spring:
   kafka:
