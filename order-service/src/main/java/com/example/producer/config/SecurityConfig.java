@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,11 +25,14 @@ public class SecurityConfig {
 
     // @formatter:off
    http
-//     .csrf().disable()
+     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+     .and()
+     .csrf().disable()
         .authorizeRequests()
-//        .mvcMatchers("/transactions").permitAll()
-        .mvcMatchers("/transaction").authenticated()
-        .mvcMatchers("/v3/api-docs").permitAll()
+        .antMatchers("/transaction/**").authenticated()
+//     .mvcMatchers("/transaction").permitAll()
+
+     .mvcMatchers("/v3/api-docs").permitAll()
      .and()
         .oauth2ResourceServer()
         .jwt();
@@ -56,6 +60,7 @@ public class SecurityConfig {
 
     return jwtDecoder;
   }
+
 }
 
 // @EnableWebSecurity
