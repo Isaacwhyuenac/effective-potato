@@ -3,8 +3,8 @@ version: '3.9'
 services:
   consumer:
     build: ./consumer
-    image: whyuenac/consumer:0.0.1
+    image: user/consumer:0.0.1
   order-service:
     build: ./order-service
-    image: whyuenac/order-service:0.0.1
+    image: user/order-service:0.0.1
 

@@ -34,18 +34,15 @@ Auth0 service is chosen to provide the sample authentication and authorization s
 
 Spring JPA is used to map the database object into java Entity objects. Modelmapper is used to transform the Entity Class Object into Data Transfer Object.
 
-
 ### Logging and monitoring
 
 Logging are added to critical part of the application for better tracing any defects.
 
 ### Testing
 
-Integration tests are created to verify the functionality of our APIs.
+Unit tests, Integration tests and Contract tests are created to verify the functionality of our APIs.
 
-```zsh
-./gradlew :order-service:test
-```
+For contract test, [consumer/src/test/java/com/example/consumer/BaseClass.java](consumer/src/test/java/com/example/consumer/BaseClass.java) and [producer/ConsumerConsumerTest](order-service/src/test/java/com/example/producer/ConsumerConsumerTest.java) serve a good example.
 
 ## Development Environment Setup
 
@@ -55,24 +52,11 @@ You will need the docker to setup the environment.
 docker-compose up -d
 ```
 
-## Producer Side Contract Build
-
-To run contract test
-
-```zsh
-./gradlew :order-service:contractTest
-```
-
-To build the contract for the consumer side to consume
-
-```zsh
-./gradlew :order-service:build publishToMavenLocal
-```
-
 ## Build Image
 
 ```zsh
-./gradlew :order-service:bootBuildImage
+./gradlew build
+docker-compose build && docker-compose push
 ```
 
 
