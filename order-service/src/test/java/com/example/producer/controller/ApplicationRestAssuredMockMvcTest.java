@@ -76,7 +76,6 @@ public class ApplicationRestAssuredMockMvcTest {
   }
 
   @Test
-  @WithMockUser(username = "testUser")
   public void testGetAllTransactions() throws Exception {
     UUID id = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
     String amount = "CHF 1000";
@@ -124,7 +123,6 @@ public class ApplicationRestAssuredMockMvcTest {
   }
 
   @Test
-  @WithMockUser(username = "testUser")
   public void testGetTransaction() throws Exception {
     UUID id = UUID.fromString("5EF60C78-2D38-4936-A736-235E0A6B2177");
     String amount = "CHF 1000";
