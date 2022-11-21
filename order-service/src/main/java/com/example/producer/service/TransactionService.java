@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,11 +40,11 @@ public class TransactionService {
 
 
   public TransactionService(
-    RestTemplateBuilder restTemplateBuilder,
+    RestTemplate restTemplate,
     SendMessage sendMessage
   ) {
-    restTemplate = restTemplateBuilder.build();
-    sendMessage = sendMessage;
+    this.restTemplate = restTemplate;
+    this.sendMessage = sendMessage;
   }
 
   /**
