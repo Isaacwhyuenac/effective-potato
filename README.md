@@ -26,6 +26,10 @@ The layout of each repo follows a standard standup
 
 OpenAPI is used to build up the API specification. When you build the [order-service](order-service), the swagger json document will appear in the `/docs/swagger.json`. You can copy the json and view it in the browser.
 
+```zsh
+./gradlew clean generateOpenApiDocs
+```
+
 ### Security (authentication and authorization)
 
 Auth0 service is chosen to provide the sample authentication and authorization setup. An API caller is supposed to request an Authorization token in order to reach our APIs.

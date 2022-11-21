@@ -55,7 +55,7 @@ contracts {
 }
 
 openApi {
-
+    apiDocsUrl.set("http://localhost:8081/v3/api-docs")
     outputDir.set(file("$rootDir/docs"))
     outputFileName.set("consumer.json")
 
@@ -93,6 +93,8 @@ dependencies {
 //    implementation 'org.modelmapper.extensions:modelmapper-spring:3.0.0'
 //    implementation 'org.modelmapper.extensions:modelmapper-jackson:3.0.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+    implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.12'
+
     implementation project(':entity')
 
     compileOnly 'org.projectlombok:lombok'
