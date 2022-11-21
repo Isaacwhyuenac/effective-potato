@@ -1,6 +1,6 @@
 # producer
 
-[![Isaacwhyuenac/spring-cloud-contract-poc](https://app.circleci.com/pipelines/github/Isaacwhyuenac/spring-cloud-contract-poc.sv?style=svg)](https://app.circleci.com/pipelines/github/Isaacwhyuenac/spring-cloud-contract-poc)
+[![Isaacwhyuenac/effective-potato](https://app.circleci.com/pipelines/github/Isaacwhyuenac/effective-potato.sv?style=svg)](https://app.circleci.com/pipelines/github/Isaacwhyuenac/effective-potato)
 
 The repo consists of
 
