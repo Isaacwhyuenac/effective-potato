@@ -1,4 +1,8 @@
 version: 2
+
+orbs:
+  docker: circleci/docker@1.7.0
+
 jobs:
   buildAndTest:
     environment:
