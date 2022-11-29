@@ -58,6 +58,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: Build docker image
           command: docker-compose build
