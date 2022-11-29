@@ -11,6 +11,7 @@ The repo consists of
 
 The layout of each repo follows a standard standup
 
+```txt
 ├── Application.java
 ├── config -> configuration class
 ├── constants
@@ -21,6 +22,7 @@ The layout of each repo follows a standard standup
 ├── repository -> data querying class
 ├── service -> class with @Service annotation
 └── utils -> Common functionalities
+```
 
 ## Requirement
 
