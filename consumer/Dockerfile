@@ -4,4 +4,4 @@ WORKDIR /usr/home
 
 COPY . .
 
-RUN java -jar build/libs/consumer-0.0.1-SNAPSHOT.jar
+RUN java -jar ./build/libs/consumer-0.0.1-SNAPSHOT.jar
