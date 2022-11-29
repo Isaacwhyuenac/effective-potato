@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Install dependencies
           command: ./gradlew build
-      - run:
+      - docker/build:
           name: Build docker
           command: docker-compose build
       - save_cache:
