@@ -31,6 +31,8 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
       - restore_cache:
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
@@ -38,14 +40,12 @@ jobs:
       - run:
           name: Build consumer contract
           command: ./gradlew :consumer:build :consumer:publishToMavenLocal
-      - setup_remote_docker:
-          version: 20.10.14
-      - run:
-          name: Build docker image
-          command: docker-compose build
       - run:
           name: Install dependencies
           command: ./gradlew build
+      - run:
+          name: Build docker image
+          command: docker-compose build
       - save_cache:
           paths:
             - ~/.gradle/wrapper
