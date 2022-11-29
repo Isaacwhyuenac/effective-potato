@@ -1,11 +1,13 @@
 # producer
 
-[![Isaacwhyuenac/effective-potato](https://app.circleci.com/pipelines/github/Isaacwhyuenac/effective-potato.sv?style=svg)](https://app.circleci.com/pipelines/github/Isaacwhyuenac/effective-potato)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Isaacwhyuenac/effective-potato/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Isaacwhyuenac/effective-potato/tree/main)
 
 The repo consists of
 
 - [order-service](order-service) a RESTful API with kafka producer.
 - [consumer](consumer) a consumer that consumes the transaction data to the database
+
+[![Api Structure](./apistructure.png)]
 
 The layout of each repo follows a standard standup
 
