@@ -44,9 +44,9 @@ jobs:
       - run:
           name: Install dependencies
           command: ./gradlew build
-      - run:
-          name: Start Docker Compose Env
-          command: docker-compose -f docker-compose.dev.yml up -d --build --remove-orphans
+#      - run:
+#          name: Start Docker Compose Env
+#          command: docker-compose -f docker-compose.dev.yml up -d --build --remove-orphans
       - run:
           name: Sleep for 300 seconds
           command: sleep 300
