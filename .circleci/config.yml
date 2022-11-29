@@ -48,6 +48,9 @@ jobs:
           name: Start Docker Compose Env
           command: docker-compose -f docker-compose.dev.yml up -d --build --remove-orphans
       - run:
+          name: Sleep for 500 seconds
+          command: sleep 500
+      - run:
           name: Build docker image
           command: docker-compose build
       - save_cache:
